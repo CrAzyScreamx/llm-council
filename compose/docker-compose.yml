@@ -1,0 +1,24 @@
+services:
+  llm-council-backend:
+    image: ghcr.io/crazyscreamx/llm-council-backend:latest
+    ports:
+      - "8001:8001"
+    environment:
+      - OPENROUTER_API_KEY=your_openrouter_api_key_here
+    volumes:
+      - ./data/conversations:/app/data/conversations
+      - ./config.py:/app/config.py
+
+  llm-council-frontend:
+    image: ghcr.io/crazyscreamx/llm-council-frontend:latest
+    ports:
+      - "80:80"
+    environment:
+      - VITE_BACKEND_URL=http://localhost:8001
+    depends_on:
+      - llm-council-backend
+
+networks:
+  default:
+    driver: bridge
+    name: llm-council-network
